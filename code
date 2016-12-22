@@ -1,0 +1,19 @@
+use strict;
+use warnings 'all';
+use feature 'say';
+
+use Number::Range;
+
+my @numbers = do {
+    open my $fh, '<', 'test.out' or die $!; 
+    local $/;
+    <$fh> =~ /\d+/g;
+};
+
+my $range = Number::Range->new(@numbers);
+
+my @sections = $range->rangeList;
+my $all = Number::Range->new("$sections[0][0]..$sections[-1][-1]");
+$all->delrange($range->range);
+
+say scalar $all->range;
